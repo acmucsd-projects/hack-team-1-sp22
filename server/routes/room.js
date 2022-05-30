@@ -37,7 +37,7 @@ router.put('/', function (req, res, next) {
 router.delete('/', function (req, res, next) {
   try {
     const { code, roomid } = req.body;
-    const { error } = deleteRoom(code, roomid);
+    const { error } = deleteRoom(router.io, code, roomid);
 
     // error handling
     if (error) return res.status(501).json({ error });

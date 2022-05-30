@@ -33,9 +33,9 @@ server.on('listening', onListening);
 /**
  * Define socket.io routes
  */
-const { setup, getIO } = require('../socket');
-setup(server);
+const { setup } = require('../socket');
 const roomRouter = require('../routes/room');
+roomRouter.io = setup(server);
 app.use('/room', roomRouter);
 
 /**

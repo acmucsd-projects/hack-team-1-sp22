@@ -1,8 +1,6 @@
-let io;
-
 const setup = (server) => {
   const { addUser, getUser, deleteUser, getUsers } = require('./users');
-  io = require('socket.io')(server);
+  const io = require('socket.io')(server);
   io.on('connection', (socket) => {
     socket.on('login', ({ name, room }, callback) => {
       const { user, error } = addUser(socket.id, name, room);
@@ -33,10 +31,8 @@ const setup = (server) => {
       }
     });
   });
-};
 
-const getIO = () => {
   return io;
 };
 
-module.exports = { setup, getIO };
+module.exports = { setup };

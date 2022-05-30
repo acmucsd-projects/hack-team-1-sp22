@@ -53,19 +53,12 @@ const getRoom = (code) => {
   return { roomname: rooms.get(code), roomid: getid(code) };
 };
 
-const deleteRoom = (code, roomid) => {
+const deleteRoom = (io, code, roomid) => {
   if (!rooms.has(code)) return { error: "Room Code don't exist" };
 
-  // TODO: AHHHHHHHH CANNOT GET IO HERE
-
-  console.log('before');
-
   if (!io) return { error: 'IO initiation failed' };
-  io.sockets.clients(roomid).forEach(function (s) {
-    s.leave(roomid);
-  });
 
-  console.log('after');
+  io.socketsLeave(roomid);
 
   rooms.delete(code);
 
