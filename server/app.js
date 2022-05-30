@@ -6,15 +6,12 @@ const cors = require('cors');
 
 const dotenv = require('dotenv');
 
-const roomRouter = require('./routes/room');
-
 const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
-app.use('/room', roomRouter);
 
 dotenv.config();
 
