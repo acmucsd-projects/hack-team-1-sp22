@@ -53,6 +53,26 @@ const getRoom = (code) => {
   return { roomname: rooms.get(code), roomid: getid(code) };
 };
 
+const deleteRoom = (code, roomid) => {
+  if (!rooms.has(code)) return { error: "Room Code don't exist" };
+
+  // TODO: AHHHHHHHH CANNOT GET IO HERE
+
+  console.log('before');
+
+  if (!io) return { error: 'IO initiation failed' };
+  io.sockets.clients(roomid).forEach(function (s) {
+    s.leave(roomid);
+  });
+
+  console.log('after');
+
+  rooms.delete(code);
+
+  return { code, roomid };
+  // delete room
+};
+
 /**
  * https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
  *
@@ -77,4 +97,4 @@ const cyrb53 = function (str, seed = 0) {
   return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 };
 
-module.exports = { createCode, getRoom };
+module.exports = { createCode, getRoom, deleteRoom };
