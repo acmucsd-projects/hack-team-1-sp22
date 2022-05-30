@@ -1,19 +1,20 @@
 const express = require('express');
 const logger = require('morgan');
+const cors = require('cors');
 
 // const mongoose = require('mongoose');
 
 const dotenv = require('dotenv');
 
-const usersRouter = require('./routes/users');
+const roomRouter = require('./routes/room');
 
 const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-app.use('/users', usersRouter);
+app.use(cors());
+app.use('/room', roomRouter);
 
 dotenv.config();
 
