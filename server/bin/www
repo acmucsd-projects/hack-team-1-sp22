@@ -6,6 +6,7 @@
 
 const app = require('../app');
 const debug = require('debug')('server:server');
+const cors = require('cors');
 const http = require('http');
 require('dotenv').config();
 
@@ -15,6 +16,12 @@ require('dotenv').config();
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
+
+/**
+ * Cross-Origin Resource Sharing
+ */
+
+app.use(cors());
 
 /**
  * Create HTTP server.
@@ -29,6 +36,42 @@ const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+/**
+ * Define socket.io routes
+ */
+const { addUser, getUser, deleteUser, getUsers } = require('../users');
+const io = require('socket.io')(server);
+io.on('connection', (socket) => {
+  socket.on('login', ({ name, room }, callback) => {
+    const { user, error } = addUser(socket.id, name, room);
+    if (error) return callback(error);
+    socket.join(user.room);
+    socket.in(room).emit('notification', {
+      title: "Someone's here",
+      description: `${user.name} just entered the room`,
+    });
+    io.in(room).emit('users', getUsers(room));
+    callback();
+  });
+
+  socket.on('sendMessage', (message) => {
+    const user = getUser(socket.id);
+    io.in(user.room).emit('message', { user: user.name, text: message });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+    const user = deleteUser(socket.id);
+    if (user) {
+      io.in(user.room).emit('notification', {
+        title: 'Someone just left',
+        description: `${user.name} just left the room`,
+      });
+      io.in(user.room).emit('users', getUsers(user.room));
+    }
+  });
+});
 
 /**
  * Normalize a port into a number, string, or false.
@@ -59,9 +102,7 @@ function onError(error) {
     throw error;
   }
 
-  const bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -84,8 +125,6 @@ function onError(error) {
 
 function onListening() {
   const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
