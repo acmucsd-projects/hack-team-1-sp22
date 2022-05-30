@@ -6,7 +6,6 @@
 
 const app = require('../app');
 const debug = require('debug')('server:server');
-const cors = require('cors');
 const http = require('http');
 require('dotenv').config();
 
@@ -16,12 +15,6 @@ require('dotenv').config();
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
-
-/**
- * Cross-Origin Resource Sharing
- */
-
-app.use(cors());
 
 /**
  * Create HTTP server.
