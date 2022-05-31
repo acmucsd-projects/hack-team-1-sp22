@@ -6,7 +6,7 @@ const CreateRoom = () => {
 
     return (
         <div>
-            <NavBar text={"Join Room"} link="/" />
+            <NavBar text={"Join Room"} link="/join-room" />
             <div className="create-room">
                 <div className='create-room-container'>
                     <div className='create-room-text'>
@@ -29,7 +29,6 @@ const CreateRoom = () => {
                     </div>
                 </div>
             </div>
-
         </div>
     )
 };
