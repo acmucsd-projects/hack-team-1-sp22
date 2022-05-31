@@ -46,7 +46,7 @@
     width: 80%;
 }
 
-.enter-room-code-input {
+.join-room-form-input, .enter-room-code-input {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -71,3 +71,9 @@ input[type=text] {
     box-sizing: border-box;
     border: 1px solid #C8C8C8;
 } */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
