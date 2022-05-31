@@ -3,14 +3,17 @@ const router = express.Router();
 
 const { createCode, getRoom, deleteRoom } = require('../rooms');
 
-/* GET roomid and roomname from code */
-router.get('/', function (req, res, next) {
+/* POST code and get roomid and roomname */
+router.post('/', function (req, res, next) {
   try {
     const { code } = req.body;
     const { roomname, roomid, error } = getRoom(code);
 
     // error handling
-    if (error) return res.status(404).json({ error });
+    if (error) {
+      console.log(error);
+      return res.status(404).json({ error })
+    };
 
     res.status(200).json({ roomname, roomid });
   } catch (error) {
@@ -20,6 +23,7 @@ router.get('/', function (req, res, next) {
 
 /* PUT newroom */
 router.put('/', function (req, res, next) {
+
   try {
     const { roomname } = req.body;
     const { code, roomid, error } = createCode(roomname);

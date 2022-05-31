@@ -1,7 +1,9 @@
 const initialState = {
     roomCode: null,
     roomName: "",
+    roomId: null,
     userName: "",
+
 }
 
 const Reducer = (state = initialState, actions) => {
@@ -20,6 +22,11 @@ const Reducer = (state = initialState, actions) => {
             return {
                 ...state,
                 userName: actions.payload
+            }
+        case 'SET_ROOM_ID':
+            return {
+                ...state,
+                roomId: actions.payload
             }
         default:
             return state;
