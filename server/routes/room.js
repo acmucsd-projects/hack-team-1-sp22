@@ -1,7 +1,8 @@
 const express = require('express');
+const { route } = require('express/lib/router');
 const router = express.Router();
 
-const { createCode, getRoom, deleteRoom } = require('../rooms');
+const { createCode, getRoom, deleteRoom, removeUser } = require('../rooms');
 
 /* GET roomid and roomname from code */
 router.get('/', function (req, res, next) {
@@ -33,11 +34,26 @@ router.put('/', function (req, res, next) {
   }
 });
 
+/* POST userleave */
+router.post('/', function (req, res, next) {
+  try {
+    const { code } = req.body;
+    const { error } = removeUser(code);
+
+    // error handling
+    if (error) return res.status(501).json({ error });
+
+    res.status(200).json({ code });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
+
 /* PUT newroom */
 router.delete('/', function (req, res, next) {
   try {
-    const { code, roomid } = req.body;
-    const { error } = deleteRoom(router.io, code, roomid);
+    const { code, roomid, host } = req.body;
+    const { error } = deleteRoom(router.io, code, roomid, host);
 
     // error handling
     if (error) return res.status(501).json({ error });
