@@ -69,7 +69,7 @@ const QuestionQueue = () => {
             socket.disconnect();
         };
 
-    }, [roomId, socket, userName]);
+    }, []);
 
 
     useEffect(() => {
