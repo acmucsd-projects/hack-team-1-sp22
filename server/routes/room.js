@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { createCode, getRoom } = require('../rooms');
+const { createCode, getRoom, deleteRoom } = require('../rooms');
 
 /* GET roomid and roomname from code */
 router.get('/', function (req, res, next) {
@@ -23,6 +23,21 @@ router.put('/', function (req, res, next) {
   try {
     const { roomname } = req.body;
     const { code, roomid, error } = createCode(roomname);
+
+    // error handling
+    if (error) return res.status(501).json({ error });
+
+    res.status(200).json({ code, roomid });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
+
+/* PUT newroom */
+router.delete('/', function (req, res, next) {
+  try {
+    const { code, roomid } = req.body;
+    const { error } = deleteRoom(router.io, code, roomid);
 
     // error handling
     if (error) return res.status(501).json({ error });
