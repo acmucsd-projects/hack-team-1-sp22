@@ -1,5 +1,5 @@
 // temporary solution for pushing old messages to new users
-const history = [];
+// const history = [];
 
 const setup = (server) => {
   const { addUser, getUser, deleteUser, getUsers } = require('./users');
@@ -19,7 +19,7 @@ const setup = (server) => {
         description: `${user.name} just entered the room`,
       });
       io.in(room).emit('users', getUsers(room));
-      io.to(socket.id).emit('message', history)
+      // io.to(socket.id).emit('message', history)
       callback();
     });
 
@@ -27,7 +27,7 @@ const setup = (server) => {
       console.log('Message sent: ', message);
       const user = getUser(socket.id);
       io.in(user.room).emit('message', { user: user.name, text: message });
-      history.push({ user: user.name, text: message });
+      // history.push({ user: user.name, text: message });
     });
 
     socket.on('disconnect', () => {

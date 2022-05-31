@@ -15,7 +15,7 @@ const QuestionQueue = () => {
 
 
     // select roomId and userName from redux state
-    const { roomId, userName } = useSelector(state => state);
+    const { roomId, userName, roomName } = useSelector(state => state);
 
     // join room using id on socket connection and listen to new messages
     useEffect(() => {
@@ -69,7 +69,7 @@ const QuestionQueue = () => {
             socket.disconnect();
         };
 
-    }, []);
+    }, [roomId, socket, userName]);
 
 
     useEffect(() => {

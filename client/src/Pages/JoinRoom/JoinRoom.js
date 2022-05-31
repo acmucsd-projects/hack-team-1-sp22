@@ -1,8 +1,8 @@
 import React from 'react';
 import './JoinRoom.css';
 import NavBar from '../../NavBar/NavBar';
-import { handleRoomCodeChange, handleRoomIdChange, handleUserNameChange, handleRoomNameChange } from '../../Redux/Actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { handleRoomIdChange, handleUserNameChange, handleRoomNameChange } from '../../Redux/Actions';
+import { useDispatch } from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
@@ -27,12 +27,12 @@ const JoinRoom = () => {
             code: parseInt(roomCodeField),
         });
 
-        let config = {
-            method: 'post',
-            url: 'http://localhost:5000/room',
-            data: data,
-            headers: { 'Content-Type': 'application/json' }
-        }
+        // let config = {
+        //     method: 'post',
+        //     url: 'http://localhost:5000/room',
+        //     data: data,
+        //     headers: { 'Content-Type': 'application/json' }
+        // }
 
         axios.post('http://localhost:5000/room', data, {
             headers: {

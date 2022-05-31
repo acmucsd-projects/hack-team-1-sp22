@@ -1,8 +1,8 @@
 const initialState = {
-    roomCode: null,
-    roomName: "",
-    roomId: null,
-    userName: "",
+    roomCode: null, // 34017
+    roomName: "", // Trevor's Room
+    roomId: null, // Trevor's Room - 34017
+    userName: "", // Marcelo
 
 }
 
