@@ -46,7 +46,7 @@
     width: 80%;
 }
 
-.enter-room-code-input {
+.join-room-form-input, .enter-room-code-input {
     display: flex;
     flex-direction: column;
     align-items: stretch;

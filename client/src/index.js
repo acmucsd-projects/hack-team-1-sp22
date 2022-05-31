@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import {Provider} from 'react-redux';
+import Store from './Redux/Store';
 
 // pages
 import CreateRoom from "./Pages/CreateRoom/CreateRoom";
@@ -12,14 +13,16 @@ const root = ReactDOM.createRoot(
   document.getElementById("root")
 );
 root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/create-room" element={<CreateRoom/>} />
+  <Provider store={Store}>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/create-room" element={<CreateRoom/>} />
 
-      <Route path="/" element={<JoinRoom/>} />
+        <Route path="/" element={<JoinRoom/>} />
 
-      <Route path="/room" element={<QuestionQueue/>} />
+        <Route path="/room" element={<QuestionQueue/>} />
 
-    </Routes>
-  </BrowserRouter>
+      </Routes>
+    </BrowserRouter>
+  </Provider>
 );
