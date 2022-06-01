@@ -92,15 +92,16 @@ const getRoom = (code) => {
  * @param {*} io socket host io server
  * @param {*} code roomcode
  * @param {*} roomid roomid
- * @param {*} host hostid
+ * @param {*} roomhost hostid
  * @returns code and roomid
  */
-const deleteRoom = (io, code, roomid, host) => {
+const deleteRoom = (io, code, roomid, roomhost) => {
   if (!rooms.has(code)) return { error: "Room Code don't exist" };
 
   if (!io) return { error: 'IO initiation failed' };
 
-  if (!host || rooms.get(code).host != host) return { error: 'Wrong host' };
+  if (!roomhost || rooms.get(code).roomhost != roomhost)
+    return { error: 'Wrong host' };
 
   io.socketsLeave(roomid);
 
