@@ -1,8 +1,34 @@
+class Room {
+  // roomlimit
+  // roomhost
+  // roomname
+  constructor(roomlimit, roomhost, roomname) {
+    this.roomlimit = roomlimit;
+    this.roomhost = roomhost;
+    this.roomname = roomname;
+    this.roomsize = 0;
+  }
+
+  isFull() {
+    return this.roomsize >= this.roomlimit;
+  }
+
+  adduser() {
+    this.roomsize++;
+  }
+
+  deleteuser() {
+    this.roomsize--;
+  }
+}
+
 /**
  * Key = code string
  * Value = pair of roomname and roomid
  */
 const rooms = new Map();
+rooms.set(0, new Room(1, 'dummyhost', 'dummyname'));
+
 const codelen = 6;
 const limit = 0.2; // if exceed the limit ratio of the rooms error
 
@@ -15,7 +41,7 @@ const limitsize = Math.floor(codemax * limit);
  * @param {*} roomname name of the room
  * @returns code and roomid if success, error if fail
  */
-const createCode = (roomLimit, roomHost, roomname) => {
+const createCode = (roomlimit, roomhost, roomname) => {
   if (rooms.size > limitsize) return { error: 'Too Much Room!' };
 
   // random number from 0 to 999999 (10^6 - 1)
@@ -28,7 +54,7 @@ const createCode = (roomLimit, roomHost, roomname) => {
     exist = rooms.has(code);
   }
 
-  const newRoom = new Room(roomLimit, roomHost, roomname);
+  const newRoom = new Room(roomlimit, roomhost, roomname);
   rooms.set(code, newRoom);
   const roomid = getid(code);
 
@@ -51,9 +77,13 @@ const getid = (code) => {
  */
 const getRoom = (code) => {
   if (!rooms.has(code)) return { error: "Room Code don't exist" };
+
   const reqroom = rooms.get(code);
+
   if (reqroom.isFull()) return { error: 'Room is full' };
+
   reqroom.adduser();
+
   return { roomname: reqroom.roomname, roomid: getid(code) };
 };
 
@@ -114,29 +144,5 @@ const cyrb53 = function (str, seed = 0) {
     Math.imul(h1 ^ (h1 >>> 13), 3266489909);
   return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 };
-
-class Room {
-  // roomlimit
-  // roomhost
-  // roomname
-  constructor(roomlimit, roomhost, roomname) {
-    this.roomlimit = roomlimit;
-    this.roomhost = roomhost;
-    this.roomname = roomname;
-    this.roomsize = 0;
-  }
-
-  isFull() {
-    return roomsize < roomlimit;
-  }
-
-  adduser() {
-    this.roomsize++;
-  }
-
-  deleteuser() {
-    this.roomsize--;
-  }
-}
 
 module.exports = { createCode, getRoom, deleteRoom, removeUser };

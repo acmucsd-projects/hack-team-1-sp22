@@ -22,8 +22,8 @@ router.get('/', function (req, res, next) {
 /* PUT newroom */
 router.put('/', function (req, res, next) {
   try {
-    const { roomname } = req.body;
-    const { code, roomid, error } = createCode(roomname);
+    const { roomlimit, roomhost, roomname } = req.body;
+    const { code, roomid, error } = createCode(roomlimit, roomhost, roomname);
 
     // error handling
     if (error) return res.status(501).json({ error });
