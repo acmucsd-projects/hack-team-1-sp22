@@ -1,9 +1,9 @@
 import React from 'react';
 import './JoinRoom.css';
 import NavBar from '../../NavBar/NavBar';
-import { handleRoomIdChange, handleUserNameChange, handleRoomNameChange } from '../../Redux/Actions';
+import { handleRoomIdChange, handleUserNameChange, handleRoomNameChange, handleRoomCodeChange } from '../../Redux/Actions';
 import { useDispatch } from 'react-redux';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const JoinRoom = () => {
@@ -14,6 +14,7 @@ const JoinRoom = () => {
     // local useState
     const [roomCodeField, setRoomCodeField] = React.useState('');
     const [userNameField, setUserNameField] = React.useState('');
+    const [error, setError] = React.useState('');
 
 
     // manage userName, roomname and roomId redux state
@@ -43,11 +44,11 @@ const JoinRoom = () => {
                 dispatch(handleRoomNameChange(res.data.roomname));
                 dispatch(handleRoomIdChange(res.data.roomid));
                 dispatch(handleUserNameChange(userNameField));
-
                 navigate('/room');
             })
             .catch(err => {
                 console.log(err);
+                setError("The room could not be joined");
             }
             );
 
@@ -84,6 +85,9 @@ const JoinRoom = () => {
                     <div className='join-room-button'>
                         <button onClick={() => handleJoinRoom()} className='btn btn-primary'>Start Asking!</button>
                     </div>
+                    <div className='join-room-error-text'>
+                            <p className='join-room-error-title'> {error} </p>
+                        </div>
                 </div>
             </div>
         </div>

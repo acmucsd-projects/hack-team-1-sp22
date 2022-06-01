@@ -3,7 +3,7 @@ const initialState = {
     roomName: "", // Trevor's Room
     roomId: null, // Trevor's Room - 34017
     userName: "", // Marcelo
-
+    isHost: false,
 }
 
 const Reducer = (state = initialState, actions) => {
@@ -27,6 +27,11 @@ const Reducer = (state = initialState, actions) => {
             return {
                 ...state,
                 roomId: actions.payload
+            }
+        case 'SET_IS_HOST':
+            return {
+                ...state,
+                isHost: actions.payload
             }
         default:
             return state;

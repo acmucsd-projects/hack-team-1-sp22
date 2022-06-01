@@ -27,7 +27,7 @@ router.put('/', function (req, res, next) {
   try {
     const { roomlimit, roomhost, roomname } = req.body;
     const { code, roomid, error } = createCode(roomlimit, roomhost, roomname);
-
+    console.log(roomname, roomlimit, roomhost);
     // error handling
     if (error) return res.status(501).json({ error });
 
@@ -46,6 +46,7 @@ router.post('/', function (req, res, next) {
     // error handling
     if (error) return res.status(501).json({ error });
 
+    console.log("post success")
     res.status(200).json({ code });
   } catch (error) {
     res.status(500).json({ error });
@@ -53,9 +54,11 @@ router.post('/', function (req, res, next) {
 });
 
 /* PUT newroom */
-router.delete('/', function (req, res, next) {
+router.put('/delete', function (req, res, next) {
   try {
     const { code, roomid, roomhost } = req.body;
+
+    console.log(code, roomid, roomhost);
     const { error } = deleteRoom(router.io, code, roomid, roomhost);
 
     // error handling

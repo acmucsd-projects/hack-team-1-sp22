@@ -3,9 +3,14 @@ import './QuestionQueue.css';
 import NavBar from '../../NavBar/NavBar';
 import { io } from 'socket.io-client';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const QuestionQueue = () => {
+    // navigator
+    const navigate = useNavigate();
+
     // local state for questions and socket
     const [questions, setQuestions] = useState([]);
     const [socket, setSocket] = useState([]);
@@ -15,7 +20,9 @@ const QuestionQueue = () => {
 
 
     // select roomId and userName from redux state
-    const { roomId, userName, roomName } = useSelector(state => state);
+    const { roomId, userName, isHost, roomCode } = useSelector(state => state);
+
+
 
     // join room using id on socket connection and listen to new messages
     useEffect(() => {
@@ -63,10 +70,23 @@ const QuestionQueue = () => {
 
         setSocket(socketVar);
 
+        let data = JSON.stringify({
+            code: roomCode,
+        });
+
         // disconnect socket on dismount
         return () => {
             console.log('Disconnecting socket...');
             socket.disconnect();
+
+            axios.post('http://localhost:5000/room', data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+
         };
 
     }, []);
@@ -89,6 +109,32 @@ const QuestionQueue = () => {
         inputRef.current.value = '';
     }
 
+    const handleEndButton = (e) => {
+        e.preventDefault();
+
+
+        let data = JSON.stringify({
+            roomid: roomId,
+            code: roomCode,
+            roomhost: userName
+        });
+        console.log(data)
+
+        axios.put(`http://localhost:5000/room/delete`, data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            console.log("room deleted")
+            window.location.href = '/';
+        }).catch (err => {
+            console.log(err)
+        });
+
+        
+    }
+
+
     return (
         <div>
             <NavBar text={"Join Room"} link="/" />
@@ -109,8 +155,9 @@ const QuestionQueue = () => {
                                 }): null}
                         </div>
                         <div className='create-room-form-input'>
-                            <input ref={inputRef} type="text" placeholder="Ask your question..." />
-                            <button onClick={(e) => handleAskButton(e)} className='btn btn-primary'>Ask</button>
+                            {isHost ? null : <input ref={inputRef} type="text" placeholder="Ask your question..." />}
+                            {isHost ? null : <button onClick={(e) => handleAskButton(e)} className='btn btn-primary'>Ask</button>}
+                            {isHost ? <button onClick={(e) => handleEndButton(e)} className='btn btn-primary'>End Room</button> : null}
                         </div>
                 </div>
             </div>

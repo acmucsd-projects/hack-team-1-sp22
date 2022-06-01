@@ -1,7 +1,7 @@
 import React from 'react';
 import './CreateRoom.css';
 import NavBar from '../../NavBar/NavBar';
-import { handleRoomIdChange, handleUserNameChange } from '../../Redux/Actions';
+import { handleRoomIdChange, handleUserNameChange, handleIsHostChange, handleRoomCodeChange } from '../../Redux/Actions';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -17,15 +17,18 @@ const CreateRoom = () => {
     // create ref for input fields
     const roomNameRef = React.useRef('');
     const maxNumRef = React.useRef('');
-    const yourNameRef = React.useRef('');
 
     const handleCreateRoom = (e) => {
         const roomName = roomNameRef.current.value;
         const maxNum = maxNumRef.current.value;
-        const yourName = yourNameRef.current.value;
+
+        // make username random uuid 6 digit
+        const userName = Math.random().toString(36).substring(2, 7);
 
         let data = JSON.stringify({
+            roomlimit: maxNum,
             roomname: roomName,
+            roomhost: userName
         });
 
         axios.put('http://localhost:5000/room', data, {
@@ -35,17 +38,18 @@ const CreateRoom = () => {
         }).then(res => {
             console.log('Room created!', res.data);
             dispatch(handleRoomIdChange(res.data.roomid));
+            dispatch(handleRoomCodeChange(res.data.code));
             navigate('/room');
         }).catch(err => {
             console.log(err);
         });
 
-        dispatch(handleUserNameChange(yourName));
+        dispatch(handleUserNameChange(userName));
+        dispatch(handleIsHostChange(true));
 
 
         roomNameRef.current.value = '';
         maxNumRef.current.value = '';
-        yourNameRef.current.value = '';
     }
 
 
@@ -65,9 +69,6 @@ const CreateRoom = () => {
                     <form className='create-room-form'>
                         <div className='create-room-form-input'>
                             <input ref={roomNameRef} type="text" placeholder="Room Name" />
-                        </div>
-                        <div className='create-room-form-input'> 
-                        <input ref={yourNameRef} type="text" placeholder="Your Name" />
                         </div>
                         <div className='create-room-form-input'>
                             <input ref={maxNumRef} type="number" placeholder="Max Number of Students" />

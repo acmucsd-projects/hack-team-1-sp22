@@ -1,4 +1,4 @@
-import { SET_ROOM_CODE, SET_ROOM_NAME, SET_USER_NAME, SET_ROOM_ID } from "./ActionTypes";
+import { SET_ROOM_CODE, SET_ROOM_NAME, SET_USER_NAME, SET_ROOM_ID, SET_IS_HOST } from "./ActionTypes";
 
 export const handleRoomCodeChange = payload => ({
     type: SET_ROOM_CODE,
@@ -17,5 +17,10 @@ export const handleUserNameChange = payload => ({
 
 export const handleRoomIdChange = payload => ({
     type: SET_ROOM_ID,
+    payload
+});
+
+export const handleIsHostChange = payload => ({
+    type: SET_IS_HOST,
     payload
 });
