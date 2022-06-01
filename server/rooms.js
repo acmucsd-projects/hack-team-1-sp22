@@ -27,7 +27,7 @@ class Room {
  * Value = pair of roomname and roomid
  */
 const rooms = new Map();
-rooms.set(0, new Room(1, 'dummyhost', 'dummyname'));
+// rooms.set(0, new Room(1, 'dummyhost', 'dummyname'));
 
 const codelen = 6;
 const limit = 0.2; // if exceed the limit ratio of the rooms error
@@ -119,6 +119,8 @@ const removeUser = (code) => {
   if (!rooms.has(code)) return { error: "Room Code don't exist" };
 
   rooms.get(code).deleteuser();
+
+  return {};
 };
 
 /**
